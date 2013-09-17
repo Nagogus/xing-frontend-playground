@@ -10,24 +10,39 @@
             margin: 0;
             padding: 0;
             background: #fff;
-            font: 14px/16px Arial, Helvetica, sans-serif
+            font: 13px/16px Arial, Helvetica, sans-serif
         }
 
         #wrapper {
             position:absolute;
             top: 50%;
             left: 50%;
-            width: 500px;
+            width: 430px;
             height: 300px;
-            margin: -150px auto auto -250px;
+            margin: -150px auto auto -215px;
         }
 
-        #mlf {
-            list-style: none;
+        h1 {
+            font-size: 1.2em;
+            line-height: 1.2em;
+        }
+
+        #mlf fieldset {
+            border: none;
+            border-top: 1px solid #ccc;
+        }
+
+        #mlf legend {
+            margin-bottom: 20px;
+        }
+
+        #mlf ul {
+            padding-left: 0;
         }
 
         #mlf li {
             margin: 10px 0;
+            list-style: none;
         }
 
         #mlf label {
@@ -39,16 +54,42 @@
         #mlf label[for="mlf-iread"] {
             font-weight: normal;
         }
+
+        #mlf input {
+            width: 235px;
+            height: 15px;
+            border: 1px solid #c8c8c8;
+            padding: 4px;
+        }
+
+        #mlf input[type="checkbox"] {
+            width: auto;
+        }
+
+        #mlf button {
+            background: #e6e87a;
+            border: 1px solid #c7cf26;
+            font-weight: bold;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        #mlf button:disabled {
+            background: #ccc;
+            border: #aaa;
+        }
     </style>
 </head>
 <body>
 
     <div id="wrapper">
         <div id="mlf-wrapper">
-            <form action="#" method="post">
+            <h1>My lovely form</h1>
+            <form action="#" method="post" id="mlf">
                 <fieldset>
-                    <legend>My lovely form</legend>
-                    <ul id="mlf">
+                    <ul>
                         <li>
                             <label for="mlf-name">Name</label>
                             <input type="text" id="mlf-name" placeholder="Your name"/>
@@ -66,7 +107,7 @@
                             <input id="mlf-iread" type="checkbox"/>
                         </li>
                         <li>
-                            <button type="submit">Send me</button>
+                            <button type="submit" disabled>Send me</button>
                         </li>
                     </ul>
                 </fieldset>

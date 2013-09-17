@@ -14,7 +14,7 @@
         }
 
         #wrapper {
-            position:absolute;
+            position: absolute;
             top: 50%;
             left: 50%;
             width: 430px;
@@ -84,39 +84,87 @@
 </head>
 <body>
 
-    <div id="wrapper">
-        <div id="mlf-wrapper">
-            <h1>My lovely form</h1>
-            <form action="#" method="post" id="mlf">
-                <fieldset>
-                    <ul>
-                        <li>
-                            <label for="mlf-name">Name</label>
-                            <input type="text" id="mlf-name" placeholder="Your name"/>
-                        </li>
-                        <li>
-                            <label for="mlf-email">E-mail</label>
-                            <input id="mlf-email" type="email" placeholder="Your e-mail"/>
-                        </li>
-                        <li>
-                            <label for="mlf-phone">Phone</label>
-                            <input id="mlf-phone" type="tel" placeholder="Your phone"/>
-                        </li>
-                        <li>
-                            <label for="mlf-iread">I read the TandC</label>
-                            <input id="mlf-iread" type="checkbox"/>
-                        </li>
-                        <li>
-                            <button type="submit" disabled>Send me</button>
-                        </li>
-                    </ul>
-                </fieldset>
-            </form>
-        </div>
+<div id="wrapper">
+    <div id="mlf-wrapper">
+        <h1>My lovely form</h1>
+
+        <form action="#" method="post" id="mlf" name="mlf" novalidate="">
+            <fieldset>
+                <ul>
+                    <li>
+                        <label for="mlf-name">Name</label>
+                        <input id="mlf-name" type="text" name="mlf-name" placeholder="Your name"/>
+                    </li>
+                    <li>
+                        <label for="mlf-email">E-mail</label>
+                        <input id="mlf-email" type="email" name="mlf-email" placeholder="Your e-mail"/>
+                    </li>
+                    <li>
+                        <label for="mlf-phone">Phone</label>
+                        <input id="mlf-phone" type="tel" name="mlf-phone" placeholder="Your phone"/>
+                    </li>
+                    <li>
+                        <label for="mlf-iread">I read the TandC</label>
+                        <input id="mlf-iread" type="checkbox" name="mlf-iread"/>
+                    </li>
+                    <li>
+                        <button type="submit">Send me</button>
+                    </li>
+                </ul>
+            </fieldset>
+        </form>
     </div>
+</div>
 
 <script type="text/javascript">
+    var MLF = MLF || {};
 
+    /**
+     * Form validator
+     * Example: new MLF.Validator('nameOfForm')
+     * @param formName name of the form to validate
+     * @constructor
+     */
+    MLF.Validator = function (formName) {
+
+        this.form = document.forms[formName];
+        this.fields = [];
+
+        if (typeof this.form === 'undefined') {
+            throw new Error('Cannot find form to validate');
+        }
+    };
+
+    /**
+     * Add field to validation list
+     * Example: addField({'name': 'name', rules: ['minlength_3']});
+     * @param field
+     * @return validator object for chaining
+     */
+    MLF.Validator.prototype.addField = function (field) {
+        return this;
+    };
+
+    /**
+     * Add fields to validation list
+     * Example: addFields({'name': 'name', rules: ['minlength_3']});
+     * @param fields
+     * @return validator object for chaining
+     */
+    MLF.Validator.prototype.addFields = function (fields) {
+        return this;
+    };
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var validator = new MLF.Validator('mlf');
+
+        validator.addFields([
+            {'name': 'mlf-name', rules: ['minlength_3']},
+            {'name': 'mlf-email', rules: ['email']}
+        ]);
+
+    });
 </script>
 </body>
 </html>

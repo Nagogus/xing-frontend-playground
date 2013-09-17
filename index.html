@@ -142,6 +142,12 @@
      * @return validator object for chaining
      */
     MLF.Validator.prototype.addField = function (field) {
+        if(field.name && this._checkFieldValidators(field)) {
+            this.fields.push(field);
+        }
+        else {
+            throw new Error('Wrong parameters for field ' + JSON.stringify(field));
+        }
         return this;
     };
 
@@ -152,7 +158,68 @@
      * @return validator object for chaining
      */
     MLF.Validator.prototype.addFields = function (fields) {
+        var field, i;
+        for(i = 0;i < fields.length; ++i) {
+            field = fields[i];
+            this.addField(field);
+        }
         return this;
+    };
+
+    /**
+     * List of validator functions
+     */
+    MLF.Validator.prototype._validators = {
+
+        minLength: function(value, length) {
+            return value.length > length;
+        },
+
+        email: function() {
+            return false;
+        }
+
+    };
+
+
+    /**
+     * Check if all validator for field exists
+     * @param field
+     * @returns {boolean}
+     * @private
+     */
+    MLF.Validator.prototype._checkFieldValidators = function(field) {
+        var i, rule;
+        if(Array.isArray(field.rules)) {
+            for(i = 0; i < field.rules.length; ++i) {
+                rule = this._separateValidatorName(field.rules[i]);
+                console.log(rule);
+                if(typeof this._validators[rule] !== 'function') {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    };
+
+    /**
+     * Separate parameters for validator function
+     * @param rule
+     * @private
+     * @return Array of params
+     */
+    MLF.Validator.prototype._separateParams = function(rule) {
+        return rule.split('_').slice(1);
+    };
+
+    /**
+     * Separate validator function name from parameters
+     * @param rule
+     * @private
+     */
+    MLF.Validator.prototype._separateValidatorName = function(rule) {
+        return rule.split('_')[0];
     };
 
     document.addEventListener("DOMContentLoaded", function () {
@@ -160,7 +227,7 @@
         var validator = new MLF.Validator('mlf');
 
         validator.addFields([
-            {'name': 'mlf-name', rules: ['minlength_3']},
+            {'name': 'mlf-name', rules: ['minLength_3']},
             {'name': 'mlf-email', rules: ['email']}
         ]);
 

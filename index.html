@@ -129,6 +129,7 @@
 
         this.form = document.forms[formName];
         this.fields = [];
+        this.callback = null;
 
         if (typeof this.form === 'undefined') {
             throw new Error('Cannot find form to validate');
@@ -164,6 +165,24 @@
             this.addField(field);
         }
         return this;
+    };
+
+    /**
+     * Register callback for showing validation errors
+     * @param callback
+     */
+    MLF.Validator.prototype.registerCallback = function(callback) {
+        if(typeof callback === 'undefined') {
+            this.callback = this._defaultCallback;
+        }
+        else {
+            if(typeof callback === 'function') {
+                this.callback = callback;
+            }
+            else {
+                throw new Error('Cannot register non-function as callback');
+            }
+        }
     };
 
     /**
@@ -222,6 +241,10 @@
         return rule.split('_')[0];
     };
 
+    MLF.Validator.prototype._defaultCallback = function(errors) {
+
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
 
         var validator = new MLF.Validator('mlf');
@@ -230,6 +253,8 @@
             {'name': 'mlf-name', rules: ['minLength_3']},
             {'name': 'mlf-email', rules: ['email']}
         ]);
+
+        validator.registerCallback()
 
     });
 </script>

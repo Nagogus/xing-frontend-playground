@@ -128,8 +128,18 @@
     MLF.Validator = function (formName) {
 
         this.form = document.forms[formName];
-        this.fields = [];
+        this.fields = {};
         this.callback = null;
+
+        this.handleEvent = function(event) {
+            var target = event.target,
+                name = target.name,
+                field;
+            if(typeof this.fields[name] !== 'undefined') {
+                field = this.fields[name];
+                console.log(field);
+            }
+        };
 
         if (typeof this.form === 'undefined') {
             throw new Error('Cannot find form to validate');
@@ -144,7 +154,9 @@
      */
     MLF.Validator.prototype.addField = function (field) {
         if(field.name && this._checkFieldValidators(field)) {
-            this.fields.push(field);
+            field._element = this.form[field.name];
+            field._valid = false;
+            this.fields[field.name] = field;
         }
         else {
             throw new Error('Wrong parameters for field ' + JSON.stringify(field));
@@ -160,9 +172,11 @@
      */
     MLF.Validator.prototype.addFields = function (fields) {
         var field, i;
-        for(i = 0;i < fields.length; ++i) {
-            field = fields[i];
-            this.addField(field);
+        for(i in fields) {
+            if(fields.hasOwnProperty(i)) {
+                field = fields[i];
+                this.addField(field);
+            }
         }
         return this;
     };
@@ -183,6 +197,24 @@
                 throw new Error('Cannot register non-function as callback');
             }
         }
+    };
+
+    /**
+     * Turn on validation on form
+     */
+    MLF.Validator.prototype.run = function() {
+        var i, field;
+        for(i in this.fields) {
+            if(this.fields.hasOwnProperty(i)) {
+                field = this.fields[i];
+                this._addFieldChangeListener(field);
+            }
+        }
+    };
+
+    MLF.Validator.prototype._addFieldChangeListener = function(field) {
+        var el = field._element;
+        el.addEventListener("keyup", this, false);
     };
 
     /**
@@ -254,7 +286,8 @@
             {'name': 'mlf-email', rules: ['email']}
         ]);
 
-        validator.registerCallback()
+        validator.registerCallback();
+        validator.run();
 
     });
 </script>

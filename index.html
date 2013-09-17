@@ -137,7 +137,7 @@
                 field;
             if(typeof this.fields[name] !== 'undefined') {
                 field = this.fields[name];
-                console.log(field);
+                this._validate(field);
             }
         };
 
@@ -212,6 +212,29 @@
         }
     };
 
+    /**
+     * Validate field and call callback
+     * @param field
+     * @private
+     */
+    MLF.Validator.prototype._validate = function(field) {
+        var i, validation;
+        for(i = 0; i < field.rules.length; ++i) {
+            validation = field.rules[i];
+            if(validation.call()) {
+
+            }
+            else {
+
+            }
+        }
+    };
+
+    /**
+     * Add event listener to element for future checks
+     * @param field
+     * @private
+     */
     MLF.Validator.prototype._addFieldChangeListener = function(field) {
         var el = field._element;
         el.addEventListener("keyup", this, false);
@@ -222,7 +245,9 @@
      */
     MLF.Validator.prototype._validators = {
 
-        minLength: function(value, length) {
+        minLength: function(field, params) {
+            var length = params[0] || 0,
+                value = field._element.value;
             return value.length > length;
         },
 
@@ -235,18 +260,22 @@
 
     /**
      * Check if all validator for field exists
+     * Bind validator function call with params
      * @param field
      * @returns {boolean}
      * @private
      */
     MLF.Validator.prototype._checkFieldValidators = function(field) {
-        var i, rule;
+        var i, rule, params;
         if(Array.isArray(field.rules)) {
             for(i = 0; i < field.rules.length; ++i) {
                 rule = this._separateValidatorName(field.rules[i]);
-                console.log(rule);
+                params = this._separateParams(field.rules[i]);
                 if(typeof this._validators[rule] !== 'function') {
                     return false;
+                }
+                else {
+                    field.rules[i] = this._validators[rule].bind(this, field, params);
                 }
             }
             return true;
@@ -273,9 +302,14 @@
         return rule.split('_')[0];
     };
 
+    /**
+     * Default callback for showing errors
+     * @param errors
+     * @private
+     */
     MLF.Validator.prototype._defaultCallback = function(errors) {
 
-    }
+    };
 
     document.addEventListener("DOMContentLoaded", function () {
 

@@ -127,8 +127,19 @@
      */
     MLF.Validator = function (formName) {
 
+        this.changeEvent = 'change';
+
         this.form = document.forms[formName];
+
         this.fields = {};
+
+        this.errors = {};
+
+        this.messages = {
+            minLength: "Please add at least %0% characters",
+            email: "Wrong email address"
+        };
+
         this.callback = null;
 
         this.handleEvent = function(event) {
@@ -153,7 +164,7 @@
      * @return validator object for chaining
      */
     MLF.Validator.prototype.addField = function (field) {
-        if(field.name && this._checkFieldValidators(field)) {
+        if(field.name && this._addFieldValidators(field)) {
             field._element = this.form[field.name];
             field._valid = false;
             this.fields[field.name] = field;
@@ -218,16 +229,18 @@
      * @private
      */
     MLF.Validator.prototype._validate = function(field) {
-        var i, validation;
+        var i, isValid;
         for(i = 0; i < field.rules.length; ++i) {
-            validation = field.rules[i];
-            if(validation.call()) {
-
+            isValid = field.rules[i];
+            if(isValid.call(this)) {
+                this.errors[field.name] = {error: false, element: field._element};
             }
             else {
-
+                this.errors[field.name] = {error: true, message: field._messages[i], element: field._element };
             }
+            this.callback(this.errors);
         }
+        console.log(this.errors);
     };
 
     /**
@@ -237,7 +250,7 @@
      */
     MLF.Validator.prototype._addFieldChangeListener = function(field) {
         var el = field._element;
-        el.addEventListener("keyup", this, false);
+        el.addEventListener(this.changeEvent, this, false);
     };
 
     /**
@@ -265,8 +278,9 @@
      * @returns {boolean}
      * @private
      */
-    MLF.Validator.prototype._checkFieldValidators = function(field) {
+    MLF.Validator.prototype._addFieldValidators = function(field) {
         var i, rule, params;
+        field._messages = [];
         if(Array.isArray(field.rules)) {
             for(i = 0; i < field.rules.length; ++i) {
                 rule = this._separateValidatorName(field.rules[i]);
@@ -276,11 +290,28 @@
                 }
                 else {
                     field.rules[i] = this._validators[rule].bind(this, field, params);
+                    field._messages[i] = this._prepareMessage(rule, params);
                 }
             }
             return true;
         }
         return false;
+    };
+
+    /**
+     * Prepared error message for field (add params to message)
+     * @param rule
+     * @param params
+     * @private
+     * @return string error message with replaced placeholders for params
+     */
+    MLF.Validator.prototype._prepareMessage = function(rule, params) {
+        var message = this.messages[rule] || 'Some error on this field',
+            i;
+        for(i = 0; i < params.length; ++i) {
+            message = message.replace("%"+i+"%", params[i]);
+        }
+        return message;
     };
 
     /**
@@ -308,7 +339,21 @@
      * @private
      */
     MLF.Validator.prototype._defaultCallback = function(errors) {
+        var i, error;
+        for(i in errors) {
+            if(errors.hasOwnProperty(i)) {
+                error = errors[i];
+                if(!error.error) {
+                    error.element.style.border = '1px solid green';
+                }
+                else {
+                    error.element.style.border = '1px solid red';
+                }
+            }
+            else {
 
+            }
+        }
     };
 
     document.addEventListener("DOMContentLoaded", function () {

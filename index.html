@@ -108,7 +108,7 @@
                         <input id="mlf-iread" type="checkbox" name="mlf-iread"/>
                     </li>
                     <li>
-                        <button type="submit">Send me</button>
+                        <button type="submit" name="submit" disabled="true">Send me</button>
                     </li>
                 </ul>
             </fieldset>
@@ -168,6 +168,7 @@
             field._element = this.form[field.name];
             field._valid = false;
             this.fields[field.name] = field;
+            this._validate(field);
         }
         else {
             throw new Error('Wrong parameters for field ' + JSON.stringify(field));
@@ -238,9 +239,11 @@
             else {
                 this.errors[field.name] = {error: true, message: field._messages[i], element: field._element };
             }
-            this.callback(this.errors);
+
+            if(this.callback !== null) {
+                this.callback(this.errors, this.form);
+            }
         }
-        console.log(this.errors);
     };
 
     /**
@@ -265,7 +268,7 @@
         },
 
         email: function() {
-            return false;
+            return true;
         }
 
     };
@@ -338,8 +341,9 @@
      * @param errors
      * @private
      */
-    MLF.Validator.prototype._defaultCallback = function(errors) {
-        var i, error;
+    MLF.Validator.prototype._defaultCallback = function(errors, form) {
+        var formValid = true,
+            i, error;
         for(i in errors) {
             if(errors.hasOwnProperty(i)) {
                 error = errors[i];
@@ -348,11 +352,17 @@
                 }
                 else {
                     error.element.style.border = '1px solid red';
+                    formValid = false;
                 }
             }
-            else {
+        }
 
-            }
+        if(formValid) {
+            form['submit'].removeAttribute('disabled');
+        }
+        else {
+            form['submit'].removeAttribute('disabled');
+            form['submit'].setAttribute('disabled', 'disabled');
         }
     };
 

@@ -1,385 +1,440 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Xing frontend playground</title>
-    <meta name="keywords" content="frontend, developer, test">
-    <meta name="description" content="Test case description">
-    <meta charset="utf-8">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #fff;
-            font: 13px/16px Arial, Helvetica, sans-serif
-        }
+  <title>Xing frontend playground</title>
+  <meta name="keywords" content="frontend, developer, test">
+  <meta name="description" content="Test case description">
+  <meta charset="utf-8">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      font: 13px/16px Arial, Helvetica, sans-serif
+    }
 
-        #wrapper {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 430px;
-            height: 300px;
-            margin: -150px auto auto -215px;
-        }
+    #wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 430px;
+      height: 300px;
+      margin: -150px auto auto -215px;
+    }
 
-        h1 {
-            font-size: 1.2em;
-            line-height: 1.2em;
-        }
+    h1 {
+      font-size: 1.2em;
+      line-height: 1.2em;
+    }
 
-        #mlf fieldset {
-            border: none;
-            border-top: 1px solid #ccc;
-        }
+    #mlf fieldset {
+      border: none;
+      border-top: 1px solid #ccc;
+    }
 
-        #mlf legend {
-            margin-bottom: 20px;
-        }
+    #mlf legend {
+      margin-bottom: 20px;
+    }
 
-        #mlf ul {
-            padding-left: 0;
-        }
+    #mlf ul {
+      padding-left: 0;
+    }
 
-        #mlf li {
-            margin: 10px 0;
-            list-style: none;
-        }
+    #mlf li {
+      margin: 10px 0;
+      list-style: none;
+      position: relative;
+    }
 
-        #mlf label {
-            display: inline-block;
-            width: 150px;
-            font-weight: bold;
-        }
+    #mlf label {
+      display: inline-block;
+      width: 150px;
+      font-weight: bold;
+    }
 
-        #mlf label[for="mlf-iread"] {
-            font-weight: normal;
-        }
+    #mlf label[for="mlf-iread"] {
+      font-weight: normal;
+    }
 
-        #mlf input {
-            width: 235px;
-            height: 15px;
-            border: 1px solid #c8c8c8;
-            padding: 4px;
-        }
+    #mlf input {
+      width: 235px;
+      height: 15px;
+      border: 1px solid #c8c8c8;
+      padding: 4px;
+    }
 
-        #mlf input[type="checkbox"] {
-            width: auto;
-        }
+    #mlf input[type="checkbox"] {
+      width: auto;
+    }
 
-        #mlf button {
-            background: #e6e87a;
-            border: 1px solid #c7cf26;
-            font-weight: bold;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            padding: 5px;
-        }
+    #mlf .validator-message {
+      display: none;
+      width: 300px;
+      height: 25px;
+      position: absolute;
+      right: -310px;
+      padding: 0 5px;
+      top: 0;
+      line-height: 2em;
+      font-weight: bold;
+      background: pink;
+    }
 
-        #mlf button:disabled {
-            background: #ccc;
-            border: #aaa;
-        }
-    </style>
+    #mlf .validator-valid {
+      border: 1px solid green;
+    }
+
+    #mlf .validator-invalid {
+      border: 1px solid red;
+    }
+
+    #mlf button {
+      background: #e6e87a;
+      border: 1px solid #c7cf26;
+      font-weight: bold;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    #mlf button:disabled {
+      background: #ccc;
+      border: #aaa;
+    }
+  </style>
 </head>
 <body>
 
 <div id="wrapper">
-    <div id="mlf-wrapper">
-        <h1>My lovely form</h1>
+  <div id="mlf-wrapper">
+    <h1>My lovely form</h1>
 
-        <form action="#" method="post" id="mlf" name="mlf" novalidate="">
-            <fieldset>
-                <ul>
-                    <li>
-                        <label for="mlf-name">Name</label>
-                        <input id="mlf-name" type="text" name="mlf-name" placeholder="Your name"/>
-                    </li>
-                    <li>
-                        <label for="mlf-email">E-mail</label>
-                        <input id="mlf-email" type="email" name="mlf-email" placeholder="Your e-mail"/>
-                    </li>
-                    <li>
-                        <label for="mlf-phone">Phone</label>
-                        <input id="mlf-phone" type="tel" name="mlf-phone" placeholder="Your phone"/>
-                    </li>
-                    <li>
-                        <label for="mlf-iread">I read the TandC</label>
-                        <input id="mlf-iread" type="checkbox" name="mlf-iread"/>
-                    </li>
-                    <li>
-                        <button type="submit" name="submit" disabled="true">Send me</button>
-                    </li>
-                </ul>
-            </fieldset>
-        </form>
-    </div>
+    <form action="#" method="post" id="mlf" name="mlf" novalidate="">
+      <fieldset>
+        <ul>
+          <li>
+            <label for="mlf-name">Name</label>
+            <input id="mlf-name" type="text" name="mlf-name" placeholder="Your name"/>
+            <div class="validator-message"></div>
+          </li>
+          <li>
+            <label for="mlf-email">E-mail</label>
+            <input id="mlf-email" type="email" name="mlf-email" placeholder="Your e-mail"/>
+            <div class="validator-message"></div>
+          </li>
+          <li>
+            <label for="mlf-phone">Phone</label>
+            <input id="mlf-phone" type="tel" name="mlf-phone" placeholder="Your phone"/>
+          </li>
+          <li>
+            <label for="mlf-iread">I read the TandC</label>
+            <input id="mlf-iread" type="checkbox" name="mlf-iread"/>
+          </li>
+          <li>
+            <button type="submit" name="submit" disabled="true">Send me</button>
+          </li>
+        </ul>
+      </fieldset>
+    </form>
+  </div>
 </div>
 
 <script type="text/javascript">
-    var MLF = MLF || {};
 
-    /**
-     * Form validator
-     * Example: new MLF.Validator('nameOfForm')
-     * @param formName name of the form to validate
-     * @constructor
-     */
-    MLF.Validator = function (formName) {
+document.addEventListener("DOMContentLoaded", function() {
 
-        this.changeEvent = 'change';
+  var validator = new MLF.Validator('mlf');
 
-        this.form = document.forms[formName];
+  validator.addFields([
+    {'name': 'mlf-name', rules: ['minLength_3']},
+    {'name': 'mlf-email', rules: ['email']}
+  ]);
 
-        this.fields = {};
+  validator.registerCallback();
+  validator.run();
 
-        this.errors = {};
+});
 
-        this.messages = {
-            minLength: "Please add at least %0% characters",
-            email: "Wrong email address"
-        };
+var MLF = MLF || {};
 
-        this.callback = null;
+/**
+ * Form validator
+ * Example: new MLF.Validator('nameOfForm')
+ * @param formName name of the form to validate
+ * @constructor
+ */
+MLF.Validator = function(formName) {
 
-        this.handleEvent = function(event) {
-            var target = event.target,
-                name = target.name,
-                field;
-            if(typeof this.fields[name] !== 'undefined') {
-                field = this.fields[name];
-                this._validate(field);
-            }
-        };
+  this.changeEvent = 'blur';
 
-        if (typeof this.form === 'undefined') {
-            throw new Error('Cannot find form to validate');
-        }
-    };
+  this.form = document.forms[formName];
 
-    /**
-     * Add field to validation list
-     * Example: addField({'name': 'name', rules: ['minlength_3']});
-     * @param field
-     * @return validator object for chaining
-     */
-    MLF.Validator.prototype.addField = function (field) {
-        if(field.name && this._addFieldValidators(field)) {
-            field._element = this.form[field.name];
-            field._valid = false;
-            this.fields[field.name] = field;
-            this._validate(field);
-        }
-        else {
-            throw new Error('Wrong parameters for field ' + JSON.stringify(field));
-        }
-        return this;
-    };
+  this.fields = {};
 
-    /**
-     * Add fields to validation list
-     * Example: addFields({'name': 'name', rules: ['minlength_3']});
-     * @param fields
-     * @return validator object for chaining
-     */
-    MLF.Validator.prototype.addFields = function (fields) {
-        var field, i;
-        for(i in fields) {
-            if(fields.hasOwnProperty(i)) {
-                field = fields[i];
-                this.addField(field);
-            }
-        }
-        return this;
-    };
+  this.errors = {};
 
-    /**
-     * Register callback for showing validation errors
-     * @param callback
-     */
-    MLF.Validator.prototype.registerCallback = function(callback) {
-        if(typeof callback === 'undefined') {
-            this.callback = this._defaultCallback;
-        }
-        else {
-            if(typeof callback === 'function') {
-                this.callback = callback;
-            }
-            else {
-                throw new Error('Cannot register non-function as callback');
-            }
-        }
-    };
+  this.messages = {
+    minLength: "Please add at least %0% characters",
+    email: "Wrong email address"
+  };
 
-    /**
-     * Turn on validation on form
-     */
-    MLF.Validator.prototype.run = function() {
-        var i, field;
-        for(i in this.fields) {
-            if(this.fields.hasOwnProperty(i)) {
-                field = this.fields[i];
-                this._addFieldChangeListener(field);
-            }
-        }
-    };
+  this.callback = null;
 
-    /**
-     * Validate field and call callback
-     * @param field
-     * @private
-     */
-    MLF.Validator.prototype._validate = function(field) {
-        var i, isValid;
-        for(i = 0; i < field.rules.length; ++i) {
-            isValid = field.rules[i];
-            if(isValid.call(this)) {
-                this.errors[field.name] = {error: false, element: field._element};
-            }
-            else {
-                this.errors[field.name] = {error: true, message: field._messages[i], element: field._element };
-            }
+  this.handleEvent = function(event) {
+    var target = event.target,
+            name = target.name,
+            field;
+    if(typeof this.fields[name] !== 'undefined') {
+      field = this.fields[name];
+      this._validate(field);
+    }
+  };
 
-            if(this.callback !== null) {
-                this.callback(this.errors, this.form);
-            }
-        }
-    };
+  if(typeof this.form === 'undefined') {
+    throw new Error('Cannot find form to validate');
+  }
+};
 
-    /**
-     * Add event listener to element for future checks
-     * @param field
-     * @private
-     */
-    MLF.Validator.prototype._addFieldChangeListener = function(field) {
-        var el = field._element;
-        el.addEventListener(this.changeEvent, this, false);
-    };
+MLF.Validator.prototype.allowedDomains = [".aero", ".biz", ".cat", ".com", ".coop", ".edu", ".gov", ".info", ".int", ".jobs", ".mil", ".mobi", ".museum", ".name",
+  ".net", ".org", ".pro", ".travel", ".ac", ".ad ", ".ae", ".af", ".ag", ".ai", ".al", ".am", ".an", ".ao", ".aq", ".ar", ".as", ".at", ".au", ".aw", ".ax", ".az", ".ba", ".bb", ".bd", ".be", ".bf", ".bg",
+  ".bh", ".bi", ".bj", ".bm", ".bn", ".bo", ".br", ".bs", ".bt", ".bv", ".bw", ".by", ".bz", ".ca" , ".cc" , ".cd", ".cf", ".cg", ".ch", ".ci", ".ck", ".cl", ".cm",
+  ".cn", ".co", ".cr", ".cu", ".cv", ".cx", ".cy", ".cz", ".de", ".dj", ".dk" , ".dm", ".do", ".dz", ".ec", ".ee", ".eg", ".er", ".es", ".et", ".eu", ".fi", ".fj", ".fk",
+  ".fm", ".fo", ".fr", ".ga", ".gb", ".gd", ".ge", ".gf", ".gg", ".gh", ".gi", ".gl", ".gm", ".gn", ".gp", ".gq", ".gr", ".gs", ".gt", ".gu", ".gw", ".gy", ".hk", ".hm",
+  ".hn", ".hr", ".ht", ".hu", ".id", ".ie", ".il", ".im", ".in", ".io", ".iq", ".ir", ".is", ".it", ".je", ".jm", ".jo", ".jp", ".ke", ".kg", ".kh", ".ki", ".km"   , ".kn",
+  ".kr", ".kw", ".ky" , ".kz", ".la", ".lb", ".lc", ".li", ".lk", ".lr", ".ls", ".lt", ".lu", ".lv", ".ly", ".ma", ".mc", ".md", ".mg", ".mh", ".mk", ".ml", ".mm", ".mn",
+  ".mo", ".mp", ".mq", ".mr", ".ms", ".mt", ".mu", ".mv", ".mw", ".mx", ".my", ".mz", ".na", ".nc", ".ne", ".nf", ".ng", ".ni", ".nl", ".no", ".np", ".nr", ".nu", ".nz",
+  ".om", ".pa", ".pe", ".pf", ".pg", ".ph", ".pk", ".pl", ".pm", ".pn", ".pr", ".ps", ".pt", ".pw", ".py", ".qa" , ".re" , ".ro", ".ru", ".rw", ".sa", ".sb", ".sc", ".sd",
+  ".se", ".sg", ".sh", ".si", ".sj", ".sk", ".sl", ".sm", ".sn", ".so", ".sr", ".st", ".su", ".sv", ".sy", ".sz", ".tc", ".td", ".tf", ".tg", ".th", ".tj", ".tk", ".tl",
+  ".tm", ".tn", ".to", ".tp", ".tr", ".tt", ".tv", ".tw", ".tz", ".ua", ".ug", ".uk", ".um", ".us", ".uy", ".uz", ".va"  , ".vc", ".ve", ".vg", ".vi", ".vn", ".vu", ".wf",
+  ".ws", ".ye", ".yt", ".yu" , ".za", ".zm", ".zw"];
 
-    /**
-     * List of validator functions
-     */
-    MLF.Validator.prototype._validators = {
+/**
+ * Add field to validation list
+ * Example: addField({'name': 'name', rules: ['minlength_3']});
+ * @param field
+ * @return validator object for chaining
+ */
+MLF.Validator.prototype.addField = function(field) {
+  if(field.name && this._addFieldValidators(field)) {
+    field._element = this.form[field.name];
+    field._valid = false;
+    this.fields[field.name] = field;
+    this._validate(field);
+  }
+  else {
+    throw new Error('Wrong parameters for field ' + JSON.stringify(field));
+  }
+  return this;
+};
 
-        minLength: function(field, params) {
-            var length = params[0] || 0,
-                value = field._element.value;
-            return value.length > length;
-        },
+/**
+ * Add fields to validation list
+ * Example: addFields({'name': 'name', rules: ['minlength_3']});
+ * @param fields
+ * @return validator object for chaining
+ */
+MLF.Validator.prototype.addFields = function(fields) {
+  var field, i;
+  for(i in fields) {
+    if(fields.hasOwnProperty(i)) {
+      field = fields[i];
+      this.addField(field);
+    }
+  }
+  return this;
+};
 
-        email: function() {
-            return true;
-        }
+/**
+ * Register callback for showing validation errors
+ * @param callback
+ */
+MLF.Validator.prototype.registerCallback = function(callback) {
+  if(typeof callback === 'undefined') {
+    this.callback = this._defaultCallback;
+  }
+  else {
+    if(typeof callback === 'function') {
+      this.callback = callback;
+    }
+    else {
+      throw new Error('Cannot register non-function as callback');
+    }
+  }
+};
 
-    };
+/**
+ * Turn on validation on form
+ */
+MLF.Validator.prototype.run = function() {
+  var i, field;
+  for(i in this.fields) {
+    if(this.fields.hasOwnProperty(i)) {
+      field = this.fields[i];
+      this._addFieldChangeListener(field);
+    }
+  }
+};
+
+/**
+ * Validate field and call callback
+ * @param field
+ * @private
+ */
+MLF.Validator.prototype._validate = function(field) {
+  var i, isValid;
+  for(i = 0; i < field.rules.length; ++i) {
+    isValid = field.rules[i];
+    if(isValid.call(this)) {
+      this.errors[field.name] = {error: false, element: field._element};
+    }
+    else {
+      this.errors[field.name] = {error: true, message: field._messages[i], element: field._element };
+    }
+
+    if(this.callback !== null) {
+      this.callback(this.errors, this.form);
+    }
+  }
+};
+
+/**
+ * Add event listener to element for future checks
+ * @param field
+ * @private
+ */
+MLF.Validator.prototype._addFieldChangeListener = function(field) {
+  var el = field._element;
+  el.addEventListener(this.changeEvent, this, false);
+};
+
+/**
+ * List of validator functions
+ */
+MLF.Validator.prototype._validators = {
+
+  minLength: function(field, params) {
+    var length = params[0] || 0,
+            value = field._element.value;
+    return value.length > length;
+  },
+
+  email: function(field) {
+    var value = field._element.value,
+        lastIndexOfDot,
+        domainName = value.slice(lastIndexOfDot);
+
+    if(/^.+@.+\..+$/.test(value)) {
+      lastIndexOfDot = value.lastIndexOf('.');
+      domainName = value.slice(lastIndexOfDot);
+      return (this.allowedDomains.indexOf(domainName) > 0);
+    }
+    return false;
+  }
+
+  };
 
 
-    /**
-     * Check if all validator for field exists
-     * Bind validator function call with params
-     * @param field
-     * @returns {boolean}
-     * @private
-     */
-    MLF.Validator.prototype._addFieldValidators = function(field) {
-        var i, rule, params;
-        field._messages = [];
-        if(Array.isArray(field.rules)) {
-            for(i = 0; i < field.rules.length; ++i) {
-                rule = this._separateValidatorName(field.rules[i]);
-                params = this._separateParams(field.rules[i]);
-                if(typeof this._validators[rule] !== 'function') {
-                    return false;
-                }
-                else {
-                    field.rules[i] = this._validators[rule].bind(this, field, params);
-                    field._messages[i] = this._prepareMessage(rule, params);
-                }
-            }
-            return true;
-        }
+/**
+ * Check if all validator for field exists
+ * Bind validator function call with params
+ * @param field
+ * @returns {boolean}
+ * @private
+ */
+MLF.Validator.prototype._addFieldValidators = function(field) {
+  var i, rule, params;
+  field._messages = [];
+  if(Array.isArray(field.rules)) {
+    for(i = 0; i < field.rules.length; ++i) {
+      rule = this._separateValidatorName(field.rules[i]);
+      params = this._separateParams(field.rules[i]);
+      if(typeof this._validators[rule] !== 'function') {
         return false;
-    };
+      }
+      else {
+        field.rules[i] = this._validators[rule].bind(this, field, params);
+        field._messages[i] = this._prepareMessage(rule, params);
+      }
+    }
+    return true;
+  }
+  return false;
+};
 
-    /**
-     * Prepared error message for field (add params to message)
-     * @param rule
-     * @param params
-     * @private
-     * @return string error message with replaced placeholders for params
-     */
-    MLF.Validator.prototype._prepareMessage = function(rule, params) {
-        var message = this.messages[rule] || 'Some error on this field',
-            i;
-        for(i = 0; i < params.length; ++i) {
-            message = message.replace("%"+i+"%", params[i]);
-        }
-        return message;
-    };
+/**
+ * Prepared error message for field (add params to message)
+ * @param rule
+ * @param params
+ * @private
+ * @return string error message with replaced placeholders for params
+ */
+MLF.Validator.prototype._prepareMessage = function(rule, params) {
+  var message = this.messages[rule] || 'Some error on this field',
+          i;
+  for(i = 0; i < params.length; ++i) {
+    message = message.replace("%" + i + "%", params[i]);
+  }
+  return message;
+};
 
-    /**
-     * Separate parameters for validator function
-     * @param rule
-     * @private
-     * @return Array of params
-     */
-    MLF.Validator.prototype._separateParams = function(rule) {
-        return rule.split('_').slice(1);
-    };
+/**
+ * Separate parameters for validator function
+ * @param rule
+ * @private
+ * @return Array of params
+ */
+MLF.Validator.prototype._separateParams = function(rule) {
+  return rule.split('_').slice(1);
+};
 
-    /**
-     * Separate validator function name from parameters
-     * @param rule
-     * @private
-     */
-    MLF.Validator.prototype._separateValidatorName = function(rule) {
-        return rule.split('_')[0];
-    };
+/**
+ * Separate validator function name from parameters
+ * @param rule
+ * @private
+ */
+MLF.Validator.prototype._separateValidatorName = function(rule) {
+  return rule.split('_')[0];
+};
 
-    /**
-     * Default callback for showing errors
-     * @param errors
-     * @param form
-     * @private
-     */
-    MLF.Validator.prototype._defaultCallback = function(errors, form) {
-        var formValid = true,
-            i, error;
-        for(i in errors) {
-            if(errors.hasOwnProperty(i)) {
-                error = errors[i];
-                if(!error.error) {
-                    error.element.style.border = '1px solid green';
-                }
-                else {
-                    error.element.style.border = '1px solid red';
-                    formValid = false;
-                }
-            }
-        }
+/**
+ * Default callback for showing errors
+ * @param errors
+ * @param form
+ * @private
+ */
+MLF.Validator.prototype._defaultCallback = function(errors, form) {
+  var formValid = true,
+      messageElement,
+      element, i, error;
+  for(i in errors) {
+    if(errors.hasOwnProperty(i)) {
+      error = errors[i];
+      element = error.element;
+      element.className = element.className.replace(/\bvalidator-[a-z]*(\s)?\b/g, '');
+      messageElement = element.parentNode.querySelector('.validator-message');
+      messageElement.innerHTML = '';
+      if(!error.error) {
+        element.className = element.className + ' validator-valid';
+        messageElement.style.display = 'none';
+      }
+      else {
+        element.className = element.className + ' validator-invalid';
+        messageElement.style.display = 'block';
+        messageElement.innerHTML = error.message;
+        formValid = false;
+      }
+    }
+  }
 
-        if(formValid) {
-            form['submit'].removeAttribute('disabled');
-        }
-        else {
-            form['submit'].removeAttribute('disabled');
-            form['submit'].setAttribute('disabled', 'disabled');
-        }
-    };
-
-    document.addEventListener("DOMContentLoaded", function () {
-
-        var validator = new MLF.Validator('mlf');
-
-        validator.addFields([
-            {'name': 'mlf-name', rules: ['minLength_3']},
-            {'name': 'mlf-email', rules: ['email']}
-        ]);
-
-        validator.registerCallback();
-        validator.run();
-
-    });
+  if(formValid) {
+    form['submit'].removeAttribute('disabled');
+  }
+  else {
+    form['submit'].removeAttribute('disabled');
+    form['submit'].setAttribute('disabled', 'disabled');
+  }
+};
 </script>
 </body>
 </html>

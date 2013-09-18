@@ -183,11 +183,18 @@ MLF.Validator = function(formName) {
 
   this.handleEvent = function(event) {
     var target = event.target,
-            name = target.name,
-            field;
-    if(typeof this.fields[name] !== 'undefined') {
-      field = this.fields[name];
-      this._validate(field);
+        name = target.name,
+        field;
+    if(event.type === this.changeEvent) {
+      if(typeof this.fields[name] !== 'undefined') {
+        field = this.fields[name];
+        this._validate(field);
+      }
+    }
+    else if(event.type === 'keypress') {
+      if(event.charCode === 13) {
+        this._validateAll();
+      }
     }
   };
 
@@ -268,10 +275,28 @@ MLF.Validator.prototype.registerCallback = function(callback) {
  */
 MLF.Validator.prototype.run = function() {
   var i, field;
-  for(i in this.fields) {
-    if(this.fields.hasOwnProperty(i)) {
-      field = this.fields[i];
-      this._addFieldChangeListener(field);
+  this._addListeners();
+};
+
+/**
+ * Add necessary listeners for form validations
+ * @private
+ */
+MLF.Validator.prototype._addListeners = function() {
+  this.form.addEventListener(this.changeEvent, this, true);
+  this.form.addEventListener('keypress', this, true);
+};
+
+/**
+ * Validate all fields
+ * For example when user pressed enter button and we can't be sure in our validation
+ * @private
+ */
+MLF.Validator.prototype._validateAll = function() {
+  var key;
+  for(key in this.fields) {
+    if(this.fields.hasOwnProperty(key)) {
+      this._validate(this.fields[key]);
     }
   }
 };
@@ -296,16 +321,6 @@ MLF.Validator.prototype._validate = function(field) {
       this.callback(this.errors, this.form);
     }
   }
-};
-
-/**
- * Add event listener to element for future checks
- * @param field
- * @private
- */
-MLF.Validator.prototype._addFieldChangeListener = function(field) {
-  var el = field._element;
-  el.addEventListener(this.changeEvent, this, false);
 };
 
 /**
